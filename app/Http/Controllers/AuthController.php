@@ -35,4 +35,14 @@ class AuthController extends Controller
     {
         return view('auth.register');
     }
+
+    public function showResetPasswordForm()
+    {
+        return view('auth.passwords.reset');
+    }
+
+    public function resetPassword(Request $request)
+    {
+        // Implementation for resetting password
+    }
 }

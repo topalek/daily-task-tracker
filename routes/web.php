@@ -13,6 +13,8 @@ Route::middleware('guest')->group(function () {
     Route::post('login', [AuthController::class, 'login'])->name('login.post');
     Route::get('register', [AuthController::class, 'showRegistrationForm'])->name('register');
     Route::post('register', [AuthController::class, 'register'])->name('register.post');
+    Route::get('reset-password', [AuthController::class, 'showResetPasswordForm'])->name('password.reset.form');
+    Route::post('reset-password', [AuthController::class, 'resetPassword'])->name('password.reset');
 });
 
 // Route::middleware('auth')->group(function () {
