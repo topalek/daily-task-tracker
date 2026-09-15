@@ -1,58 +1,127 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Daily Task Tracker
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Web-приложение для ежедневного управления задачами: создавайте задачи, организуйте по категориям, отслеживайте прогресс и повторяющиеся задачи.
 
-## About Laravel
+## Технологии
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+| Компонент | Версия |
+|---|---|
+| PHP | >= 8.3 |
+| Laravel | 13.x |
+| MySQL/MariaDB | 11.8+ |
+| Tailwind CSS | 4.x |
+| Vite | 8.x |
+| PHPUnit | 12.x |
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
-
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
-
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## Установка
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git clone <repo-url>
+cd daily-tracker
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### Бэкенд
 
-## Contributing
+```bash
+composer install
+cp .env.example .env
+php artisan key:generate
+php artisan migrate
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Настройте подключение к БД в `.env` (по умолчанию SQLite):
 
-## Code of Conduct
+```
+DB_CONNECTION=sqlite
+DB_DATABASE=database/database.sqlite
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Фронтенд
 
-## Security Vulnerabilities
+```bash
+npm install
+npm run dev     # разработка
+npm run build   # продакшн
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Запуск
 
-## License
+```bash
+composer dev     # или: php artisan dev
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Приложение: [http://localhost:8000](http://localhost:8000)
+
+## Структура БД
+
+```
+users
+├── id, name, email, password, ...
+
+categories
+├── id, user_id (FK), name
+│
+tasks
+├── id, user_id (FK), category_id (FK, nullable)
+├── title, description (nullable)
+├── is_recurring (boolean, default false)
+├── task_date (datetime, nullable)
+├── completed_at (datetime, nullable)
+```
+
+Связи: `User → Categories (1:N)`, `User → Tasks (1:N)`, `Category → Tasks (1:N)`
+
+## Роуты
+
+| Метод | URI | Описание |
+|---|---|---|
+| GET | `/` | Лендинг (публичный) |
+| GET | `/login` | Форма входа |
+| POST | `/login` | Авторизация |
+| GET | `/register` | Форма регистрации |
+| POST | `/register` | Регистрация |
+| GET | `/reset-password` | Сброс пароля |
+
+> **Замечание:** Маршруты `dashboard` и `logout` пока закомментированы, контроллеры находятся в стадии разработки.
+
+## Структура проекта
+
+```
+app/
+├── Http/Controllers/
+│   ├── AuthController.php          # Авторизация (login, register, reset-password)
+│   └── DashboardController.php     # Панель управления (пустой)
+├── Models/
+│   ├── User.php
+│   ├── Task.php
+│   └── Category.php
+└── Providers/
+
+resources/
+├── css/app.css                     # Tailwind v4 + тема dark/light
+├── js/app.js                       # Переключатель темы
+└── views/
+    ├── welcome.blade.php           # Лендинг
+    ├── auth/                       # Auth-формы (login, register, reset-password, ...)
+    └── components/                 # Blade-компоненты (layouts, inputs)
+```
+
+## Особенности
+
+- Лендинг-страница с описанием функционала
+- Переключатель темы dark/light (сохраняется в localStorage)
+- Система категорий для организации задач
+- Поддержка повторяющихся задач (`is_recurring`)
+- Отслеживание даты выполнения и времени завершения
+
+## Тестирование
+
+```bash
+composer test       # или: php artisan test
+```
+
+Тесты работают с in-memory SQLite, отдельно от основной БД.
+
+## Лицензия
+
+[MIT](https://opensource.org/licenses/MIT)
