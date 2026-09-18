@@ -3,7 +3,6 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use App\Models\Category;
 use Database\Factories\UserFactory;
 use Illuminate\Console\View\Components\Task;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -33,6 +32,7 @@ use Ramsey\Collection\Collection;
  * @property-read int|null $notifications_count
  * @property-read Collection<int,Task> $tasks
  * @property-read int|null $tasks_count
+ *
  * @method UserFactory factory($count = null, $state = [])
  * @method static Builder<static>|User newModelQuery()
  * @method static Builder<static>|User newQuery()
@@ -45,6 +45,7 @@ use Ramsey\Collection\Collection;
  * @method static Builder<static>|User wherePassword($value)
  * @method static Builder<static>|User whereRememberToken($value)
  * @method static Builder<static>|User whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 #[Fillable(['name', 'email', 'password'])]

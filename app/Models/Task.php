@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Category;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -22,6 +21,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property-read Category|null $category
  * @property-read User $user
+ *
  * @method static Builder<static>|Task newModelQuery()
  * @method static Builder<static>|Task newQuery()
  * @method static Builder<static>|Task query()
@@ -35,6 +35,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|Task whereTitle($value)
  * @method static Builder<static>|Task whereUpdatedAt($value)
  * @method static Builder<static>|Task whereUserId($value)
+ *
  * @mixin \Eloquent
  */
 class Task extends Model

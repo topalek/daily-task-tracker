@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Task;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -20,6 +18,7 @@ use Illuminate\Support\Carbon;
  * @property-read Collection<int, Task> $tasks
  * @property-read int|null $tasks_count
  * @property-read User $user
+ *
  * @method static Builder<static>|Category newModelQuery()
  * @method static Builder<static>|Category newQuery()
  * @method static Builder<static>|Category query()
@@ -28,11 +27,11 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|Category whereName($value)
  * @method static Builder<static>|Category whereUpdatedAt($value)
  * @method static Builder<static>|Category whereUserId($value)
+ *
  * @mixin \Eloquent
  */
 class Category extends Model
 {
-
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

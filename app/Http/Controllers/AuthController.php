@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LoginRequest;
 use Illuminate\Http\Request;
 
 class AuthController extends Controller
@@ -11,19 +12,14 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
-        // Validate the login form data
-        // $credentials = $request->validate([
-        //     'email' => ['required', 'email'],
-        //     'password' => ['required'],
-        // ]);
-
-        // // Attempt to log the user in
-        // if (auth()->attempt($credentials)) {
-        //     // Authentication passed, redirect to dashboard
-        //     return redirect()->intended('/dashboard');
-        // }
+        // Attempt to log the user in
+        if (auth()->attempt($request->only('email', 'password'), $request->boolean('remember'))) {
+            // Authentication passed, redirect to dashboard
+            $request->session()->regenerate();
+            return redirect()->intended(route('dashboard'));
+        }
 
         // Authentication failed, redirect back with an error message
         return back()->withErrors([
