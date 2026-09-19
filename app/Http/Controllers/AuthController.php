@@ -17,13 +17,12 @@ class AuthController extends Controller
     public function login(LoginRequest $request)
     {
 
-        if (auth()->attempt($request->only('email', 'password'), $request->boolean('remember'))) {
-            // Authentication passed, redirect to dashboard
+        if (!auth()->attempt($request->only('email', 'password'), $request->boolean('remember'))) {
             $request->session()->regenerate();
             return redirect()->intended(route('dashboard'));
         }
 
-        throw new ValidationException([
+        return redirect()->back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
         ]);
     }
